@@ -188,6 +188,17 @@
     background:var(--bg);border:1px solid var(--panel-border);border-radius:10px;padding:10px;
   }
   .opt-row .opt-fields{flex:1;display:flex;flex-direction:column;gap:6px;}
+  .opt-leaf-fields{
+    display:flex;flex-direction:column;gap:4px;margin-top:4px;padding-top:8px;
+    border-top:1px dashed var(--panel-border);
+  }
+  .opt-leaf-label{font-size:11px;color:var(--muted);font-weight:600;}
+  .opt-leaf-tag, .opt-leaf-desc{
+    background:var(--input-bg);border:1px solid var(--panel-border);border-radius:8px;
+    padding:8px 10px;color:var(--text);font-size:13px;font-family:inherit;
+  }
+  .opt-leaf-tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  .opt-leaf-desc{resize:vertical;}
   .opt-row .remove-opt{
     background:transparent;border:1px solid var(--panel-border);color:var(--danger);
     border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px;height:38px;
@@ -490,6 +501,22 @@ function renderBreadcrumb(){
   });
 }
 
+function removeNodeEverywhere(targetId){
+  Object.keys(NODES).forEach(id => {
+    const n = NODES[id];
+    if (n.type === "question"){
+      n.options = n.options.filter(o => o.next !== targetId);
+    }
+  });
+}
+
+function isReferencedAnywhere(targetId){
+  return Object.keys(NODES).some(id => {
+    const n = NODES[id];
+    return n.type === "question" && n.options.some(o => o.next === targetId);
+  });
+}
+
 function jumpTo(stepIndex){
   if (stepIndex >= path.length - 1) return;
   const dest = path[stepIndex + 1].nodeId;
@@ -607,7 +634,8 @@ function buildEditor(nodeId){
     actions.className = "editor-actions";
     actions.innerHTML =
       '<button class="btn-primary" id="saveLeafBtn">Salvar</button>' +
-      '<button class="btn-secondary" id="cancelEditBtn">Cancelar</button>';
+      '<button class="btn-secondary" id="cancelEditBtn">Cancelar</button>' +
+      '<button class="btn-danger" id="deleteLeafBtn">Excluir esta tag</button>';
     box.appendChild(actions);
 
     box.querySelector("#saveLeafBtn").onclick = () => {
@@ -618,6 +646,13 @@ function buildEditor(nodeId){
       renderAll();
     };
     box.querySelector("#cancelEditBtn").onclick = () => { editMode = false; toggleEditUi(); renderAll(); };
+    box.querySelector("#deleteLeafBtn").onclick = () => {
+      if (!confirm('Excluir a tag "' + node.tag + '" de vez? Isso também remove a opção que leva até ela.')) return;
+      removeNodeEverywhere(nodeId);
+      delete NODES[nodeId];
+      persist();
+      goBack();
+    };
 
   } else {
     box.innerHTML = '<h3>Editar esta pergunta</h3>';
@@ -654,7 +689,7 @@ function buildEditor(nodeId){
 
     const hint = document.createElement("div");
     hint.className = "small-hint";
-    hint.textContent = "Dica: para apontar uma opção para uma pergunta que já existe, escolha o destino no menu de cada opção.";
+    hint.textContent = "Dica: quando a opção leva a uma tag (🏷), o nome e a descrição dela aparecem editáveis logo abaixo, nesta mesma tela. Quando leva a outra pergunta (❓), não há campos extra.";
     box.appendChild(hint);
 
     const actions = document.createElement("div");
@@ -666,14 +701,29 @@ function buildEditor(nodeId){
 
     box.querySelector("#saveQBtn").onclick = () => {
       node.question = box.querySelector("#questionInput").value.trim() || node.question;
+      const oldTargets = node.options.map(o => o.next);
       const rows = optsWrap.querySelectorAll(".opt-row");
       const newOptions = [];
       rows.forEach(row => {
         const label = row.querySelector(".opt-label-input").value.trim();
         const next = row.querySelector(".opt-next-select").value;
         if (label) newOptions.push({ label, next });
+
+        const tagInput = row.querySelector(".opt-leaf-tag");
+        const descInput = row.querySelector(".opt-leaf-desc");
+        if (tagInput && descInput && NODES[next] && NODES[next].type === "leaf"){
+          NODES[next].tag = tagInput.value.trim() || NODES[next].tag;
+          NODES[next].desc = descInput.value.trim();
+        }
       });
       node.options = newOptions;
+      const newTargets = newOptions.map(o => o.next);
+      const removedTargets = oldTargets.filter(t => !newTargets.includes(t));
+      removedTargets.forEach(id => {
+        if (NODES[id] && NODES[id].type === "leaf" && !isReferencedAnywhere(id)){
+          delete NODES[id];
+        }
+      });
       persist();
       renderAll();
     };
@@ -707,6 +757,40 @@ function buildOptionRow(option, idx){
     select.appendChild(opt);
   });
   fields.appendChild(select);
+
+  const leafFields = document.createElement("div");
+  leafFields.className = "opt-leaf-fields";
+  fields.appendChild(leafFields);
+
+  function renderLeafFields(leafId){
+    leafFields.innerHTML = "";
+    const n = NODES[leafId];
+    if (!n || n.type !== "leaf") return;
+
+    const tagLabel = document.createElement("label");
+    tagLabel.textContent = "Nome da tag";
+    tagLabel.className = "opt-leaf-label";
+    const tagInput = document.createElement("input");
+    tagInput.type = "text";
+    tagInput.className = "opt-leaf-tag";
+    tagInput.value = n.tag;
+    tagInput.placeholder = "nome_da_tag";
+
+    const descLabel = document.createElement("label");
+    descLabel.textContent = "Descrição / quando usar";
+    descLabel.className = "opt-leaf-label";
+    const descInput = document.createElement("textarea");
+    descInput.className = "opt-leaf-desc";
+    descInput.value = n.desc;
+    descInput.rows = 2;
+
+    leafFields.appendChild(tagLabel);
+    leafFields.appendChild(tagInput);
+    leafFields.appendChild(descLabel);
+    leafFields.appendChild(descInput);
+  }
+  renderLeafFields(option.next);
+  select.addEventListener("change", () => renderLeafFields(select.value));
 
   row.appendChild(fields);
 
