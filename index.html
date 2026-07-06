@@ -50,7 +50,7 @@
   h1{font-size:28px;font-weight:800;margin:0 0 18px;letter-spacing:-0.01em;}
   .meta .title{font-weight:700;font-size:14px;}
   .meta .subtitle{color:var(--muted);font-size:13px;margin-top:2px;}
-  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px;flex-wrap:wrap;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;flex-wrap:wrap;}
   .top-right{display:flex;gap:8px;align-items:center;}
   .icon-btn{
     background:var(--panel);
@@ -76,6 +76,7 @@
     box-shadow:var(--shadow);
   }
   .mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .icon-btn.active{background:var(--accent);border-color:var(--accent);}
   hr{border:none;border-top:1px solid var(--panel-border);margin:14px 0 20px;}
   input[type=text], textarea, select{
     width:100%;
@@ -211,16 +212,10 @@
 <div class="wrap">
 
   <div class="topbar">
-    <div>
-      <h1>Apoio nas tags</h1>
-      <div class="meta">
-        <div class="subtitle" id="lastUpdated"></div>
-      </div>
+    <div class="meta">
+      <div class="subtitle" id="lastUpdated"></div>
     </div>
-    <div class="top-right">
-      <button class="icon-btn" id="themeBtn" title="Alternar tema claro/escuro">🌙</button>
-      <button class="mode-btn" id="editModeBtn">Modo de edição</button>
-    </div>
+    <button class="icon-btn" id="editModeBtn" title="Modo de edição">✏️</button>
   </div>
 
   <hr>
@@ -244,8 +239,6 @@
     <button class="ctrl-btn" id="restartBtn">↺ Recomeçar</button>
   </div>
   <div class="save-indicator" id="saveIndicator"></div>
-
-  <footer>Ferramenta de apoio interna · atualize o conteúdo sempre que as tags mudarem</footer>
 </div>
 
 <script>
@@ -391,7 +384,6 @@ const DEFAULT_NODES = {
    ARMAZENAMENTO (com fallback seguro se localStorage falhar)
 --------------------------------------------------------- */
 const STORAGE_KEY = "dtree_tags_nodes_v1";
-const THEME_KEY = "dtree_tags_theme";
 const LAST_UPDATED_KEY = "dtree_tags_last_updated";
 /* Se editar este arquivo direto no código (fora do Modo de edição),
    atualize a linha abaixo manualmente para refletir a data da alteração. */
@@ -431,30 +423,18 @@ function renderLastUpdated(){
 }
 
 /* ---------------------------------------------------------
-   TEMA (claro/escuro automático + alternância manual)
+   TEMA (100% automático, conforme o sistema de quem acessa)
 --------------------------------------------------------- */
 function applyTheme(theme){
   document.documentElement.setAttribute("data-theme", theme);
-  document.getElementById("themeBtn").textContent = theme === "dark" ? "☀️" : "🌙";
 }
 (function initTheme(){
-  const saved = storageGet(THEME_KEY);
-  if (saved === "dark" || saved === "light"){
-    applyTheme(saved);
-  } else {
-    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    applyTheme(prefersDark ? "dark" : "light");
-  }
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
 })();
-document.getElementById("themeBtn").addEventListener("click", () => {
-  const cur = document.documentElement.getAttribute("data-theme");
-  const next = cur === "dark" ? "light" : "dark";
-  applyTheme(next);
-  storageSet(THEME_KEY, next);
-});
 if (window.matchMedia){
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (!storageGet(THEME_KEY)) applyTheme(e.matches ? "dark" : "light");
+    applyTheme(e.matches ? "dark" : "light");
   });
 }
 
@@ -478,12 +458,41 @@ function renderAll(){
 
 function renderBreadcrumb(){
   const el = document.getElementById("breadcrumb");
-  const crumbs = ["Início", ...path.map(p => p.answerLabel)];
-  el.innerHTML = crumbs.map((c,i) => {
-    const isLast = i === crumbs.length - 1;
-    return (i>0 ? '<span class="sep">›</span>' : '') +
-      '<span class="' + (isLast ? "current" : "crumb") + '">' + escapeHtml(c) + '</span>';
-  }).join("");
+  el.innerHTML = "";
+
+  const startSpan = document.createElement("span");
+  startSpan.className = path.length === 0 ? "current" : "crumb";
+  startSpan.textContent = "Início";
+  if (path.length > 0){
+    startSpan.style.cursor = "pointer";
+    startSpan.onclick = () => { path = []; current = "root"; renderAll(); };
+  }
+  el.appendChild(startSpan);
+
+  path.forEach((step, i) => {
+    const sep = document.createElement("span");
+    sep.className = "sep";
+    sep.textContent = "›";
+    el.appendChild(sep);
+
+    const isLast = i === path.length - 1;
+    const span = document.createElement("span");
+    span.className = isLast ? "current" : "crumb";
+    span.textContent = step.answerLabel;
+    if (!isLast){
+      span.style.cursor = "pointer";
+      span.onclick = () => jumpTo(i);
+    }
+    el.appendChild(span);
+  });
+}
+
+function jumpTo(stepIndex){
+  if (stepIndex >= path.length - 1) return;
+  const dest = path[stepIndex + 1].nodeId;
+  path = path.slice(0, stepIndex + 1);
+  current = dest;
+  renderAll();
 }
 
 function escapeHtml(s){
@@ -496,7 +505,7 @@ function renderHistory(){
   const el = document.getElementById("history");
   el.innerHTML = "";
 
-  path.forEach(step => {
+  path.forEach((step, i) => {
     const qbox = document.createElement("div");
     qbox.className = "qbox";
     qbox.textContent = step.question;
@@ -507,6 +516,9 @@ function renderHistory(){
     const chip = document.createElement("span");
     chip.className = "answer-chip";
     chip.textContent = step.answerLabel;
+    chip.title = "Clique para revisar esta escolha";
+    chip.style.cursor = "pointer";
+    chip.onclick = () => jumpTo(i);
     row.appendChild(chip);
     el.appendChild(row);
   });
@@ -727,8 +739,9 @@ function fieldTextarea(labelText, value, id){
 }
 
 function toggleEditUi(){
-  document.getElementById("editModeBtn").classList.toggle("active", editMode);
-  document.getElementById("editModeBtn").textContent = editMode ? "Sair do modo de edição" : "Modo de edição";
+  const btn = document.getElementById("editModeBtn");
+  btn.classList.toggle("active", editMode);
+  btn.title = editMode ? "Sair do modo de edição" : "Modo de edição";
   document.getElementById("dataIo").style.display = editMode ? "flex" : "none";
 }
 
