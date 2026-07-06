@@ -6,35 +6,35 @@
 <title>Dtree tags · Atendimento Facio</title>
 <style>
   :root{
-    --bg:#f6f6f8;
-    --panel:#ffffff;
-    --panel-border:#e2e3e8;
-    --text:#16171b;
-    --muted:#6b6c76;
-    --accent:#3b82f6;
-    --accent-hover:#2563eb;
-    --tag-bg:#eaf1fd;
-    --tag-border:#a9c6f2;
-    --tag-label:#2f5fa8;
-    --link:#2563eb;
-    --danger:#e35555;
+    --bg:#ffffff;
+    --panel:#f7f6f3;
+    --panel-border:#e9e9e7;
+    --text:#37352f;
+    --muted:#9b9a97;
+    --accent:#2383e2;
+    --accent-hover:#1a6fc4;
+    --tag-bg:#e7f3fe;
+    --tag-border:#b4d9f7;
+    --tag-label:#2383e2;
+    --link:#2383e2;
+    --danger:#eb5757;
     --input-bg:#ffffff;
     --shadow:0 1px 2px rgba(0,0,0,.04);
   }
   html[data-theme="dark"]{
-    --bg:#0b0b0d;
-    --panel:#17181c;
-    --panel-border:#2a2b30;
-    --text:#f4f4f2;
-    --muted:#9a9ba3;
-    --accent:#3b82f6;
-    --accent-hover:#2563eb;
-    --tag-bg:#122032;
-    --tag-border:#2f5a8f;
+    --bg:#191919;
+    --panel:#2f2f2f;
+    --panel-border:#3f3f3f;
+    --text:#e9e9e7;
+    --muted:#9b9a97;
+    --accent:#5b9df9;
+    --accent-hover:#3d84e0;
+    --tag-bg:#20364d;
+    --tag-border:#3a6a9c;
     --tag-label:#7fb2ff;
-    --link:#6ea8fe;
-    --danger:#ff6b6b;
-    --input-bg:#1f2027;
+    --link:#7fb2ff;
+    --danger:#ff7369;
+    --input-bg:#252525;
     --shadow:none;
   }
   *{box-sizing:border-box;}
@@ -212,10 +212,9 @@
 
   <div class="topbar">
     <div>
-      <h1>Dtree tags</h1>
+      <h1>Apoio nas tags</h1>
       <div class="meta">
-        <div class="title">Central de apoio · Atendimento Facio</div>
-        <div class="subtitle">Cadastro · Bloqueio · Pagamentos recebidos · Pagamentos enviados · Segurança · Produtos</div>
+        <div class="subtitle" id="lastUpdated"></div>
       </div>
     </div>
     <div class="top-right">
@@ -393,6 +392,10 @@ const DEFAULT_NODES = {
 --------------------------------------------------------- */
 const STORAGE_KEY = "dtree_tags_nodes_v1";
 const THEME_KEY = "dtree_tags_theme";
+const LAST_UPDATED_KEY = "dtree_tags_last_updated";
+/* Se editar este arquivo direto no código (fora do Modo de edição),
+   atualize a linha abaixo manualmente para refletir a data da alteração. */
+const DEFAULT_LAST_UPDATED = "06/07/2026";
 let memoryStore = {};
 
 function storageGet(key){
@@ -414,9 +417,17 @@ try{
 
 function persist(){
   storageSet(STORAGE_KEY, JSON.stringify(NODES));
+  const now = new Date();
+  storageSet(LAST_UPDATED_KEY, now.toLocaleString("pt-BR"));
+  renderLastUpdated();
   const ind = document.getElementById("saveIndicator");
-  ind.textContent = "Alterações salvas neste navegador em " + new Date().toLocaleTimeString("pt-BR");
+  ind.textContent = "Alterações salvas neste navegador em " + now.toLocaleTimeString("pt-BR");
   setTimeout(() => { if (ind.textContent.startsWith("Alterações")) ind.textContent=""; }, 4000);
+}
+
+function renderLastUpdated(){
+  const stamp = storageGet(LAST_UPDATED_KEY) || DEFAULT_LAST_UPDATED;
+  document.getElementById("lastUpdated").textContent = "Atualizado em " + stamp;
 }
 
 /* ---------------------------------------------------------
@@ -816,6 +827,7 @@ document.getElementById("search").addEventListener("input", (e) => {
 document.getElementById("backBtn").addEventListener("click", goBack);
 document.getElementById("restartBtn").addEventListener("click", restart);
 
+renderLastUpdated();
 renderAll();
 </script>
 </body>
