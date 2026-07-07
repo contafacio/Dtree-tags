@@ -148,6 +148,18 @@
     display:flex;align-items:center;gap:8px;
   }
   .result .desc{font-size:14.5px;line-height:1.55;}
+  .result .example{
+    margin-top:10px;font-size:13.5px;line-height:1.5;font-style:italic;color:var(--text);
+  }
+  .result .example-label{
+    font-style:normal;font-weight:700;font-size:11px;text-transform:uppercase;
+    letter-spacing:.04em;color:var(--muted);margin-right:4px;
+  }
+  .result .saiba-mais{margin-top:10px;}
+  .result .saiba-mais a{
+    color:var(--link);font-size:13.5px;font-weight:600;text-decoration:none;
+  }
+  .result .saiba-mais a:hover{text-decoration:underline;}
   .result .note{
     margin-top:12px;font-size:12.5px;color:var(--muted);
     border-top:1px solid var(--panel-border);padding-top:8px;
@@ -253,6 +265,7 @@
     <button class="ctrl-btn" id="restartBtn">↺ Recomeçar</button>
   </div>
   <div class="save-indicator" id="saveIndicator"></div>
+
 </div>
 
 <script>
@@ -337,61 +350,61 @@ const DEFAULT_NODES = {
   /* -------- folhas (tags finais) -------- */
 
   /* Cadastro */
-  exclusao:              { type:"leaf", tag:"exclusão",              desc:"Solicitação de exclusão de cadastro. Utilizar quando o usuário solicitar a exclusão do cadastro ou encerramento da conta QITech.", keywords:"cancelar conta apagar dados excluir encerramento" },
-  validacao_documentos:  { type:"leaf", tag:"validacao_documentos",  desc:"Validação de documentos. Quando houver validação pela CAF ou manual em casos de suspeita de fraude.", keywords:"caf documentos validação manual" },
-  abertura_conta_qi:     { type:"leaf", tag:"abertura_conta_qi",     desc:"Abertura/validação conta QI Tech. Quando o usuário tiver dúvidas sobre abertura de conta ou quando está com a conta pendente.", keywords:"qi tech conta pendente abertura" },
-  assinatura_CCB:        { type:"leaf", tag:"assinatura_CCB",        desc:"Assinatura de contrato. Quando o usuário tiver dúvidas sobre a CCB, contrato, aceite digital ou não conseguir concluir a assinatura.", keywords:"ccb contrato aceite digital assinar" },
-  troca_de_conta:        { type:"leaf", tag:"troca_de_conta",        desc:"Alteração de conta bancária. Quando o cliente solicitar troca da conta cadastrada para recebimento do valor.", keywords:"troca conta bancária recebimento" },
-  banco_nao_aceito:      { type:"leaf", tag:"banco_nao_aceito",      desc:"Banco não permitido. Quando o usuário quiser cadastrar um banco não aceito.", keywords:"banco não permitido cadastrar" },
-  apoio_app:             { type:"leaf", tag:"apoio_app",             desc:"Suporte ao aplicativo. Quando o usuário tiver dúvidas ou dificuldades para usar o App.", keywords:"app aplicativo suporte dificuldade" },
-  pix_autorizacao:       { type:"leaf", tag:"pix_autorizacao",       desc:"Autorização/validação Pix. Quando houver dúvidas relacionadas à abertura de conta QI Tech ou dificuldades no momento da autorização do Pix Inteligente.", keywords:"pix inteligente autorização qi tech" },
-  CRF_taxas:             { type:"leaf", tag:"CRF_taxas",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição" },
-  CRF_limites:           { type:"leaf", tag:"CRF_limites",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta" },
-  CRF_pre_contratacao:   { type:"leaf", tag:"CRF_pre_contratacao",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil" },
-  CT_assinatura_CCB:     { type:"leaf", tag:"CT_assinatura_CCB",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura" },
-  CT_Como_funciona:      { type:"leaf", tag:"CT_Como_funciona",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona" },
-  ant_duvidas:           { type:"leaf", tag:"ant_duvidas",           desc:"Dúvidas antecipação. Dúvidas gerais sobre Antecipação de Salário, funcionamento, contratação, prazo ou utilização.", keywords:"antecipação salário duvida geral" },
+  exclusao:              { type:"leaf", tag:"exclusão",              desc:"Solicitação de exclusão de cadastro. Utilizar quando o usuário solicitar a exclusão do cadastro ou encerramento da conta QITech.", keywords:"cancelar conta apagar dados excluir encerramento", example:"", link:"" },
+  validacao_documentos:  { type:"leaf", tag:"validacao_documentos",  desc:"Validação de documentos. Quando houver validação pela CAF ou manual em casos de suspeita de fraude.", keywords:"caf documentos validação manual", example:"", link:"" },
+  abertura_conta_qi:     { type:"leaf", tag:"abertura_conta_qi",     desc:"Abertura/validação conta QI Tech. Quando o usuário tiver dúvidas sobre abertura de conta ou quando está com a conta pendente.", keywords:"qi tech conta pendente abertura", example:"", link:"" },
+  assinatura_CCB:        { type:"leaf", tag:"assinatura_CCB",        desc:"Assinatura de contrato. Quando o usuário tiver dúvidas sobre a CCB, contrato, aceite digital ou não conseguir concluir a assinatura.", keywords:"ccb contrato aceite digital assinar", example:"", link:"" },
+  troca_de_conta:        { type:"leaf", tag:"troca_de_conta",        desc:"Alteração de conta bancária. Quando o cliente solicitar troca da conta cadastrada para recebimento do valor.", keywords:"troca conta bancária recebimento", example:"", link:"" },
+  banco_nao_aceito:      { type:"leaf", tag:"banco_nao_aceito",      desc:"Banco não permitido. Quando o usuário quiser cadastrar um banco não aceito.", keywords:"banco não permitido cadastrar", example:"", link:"" },
+  apoio_app:             { type:"leaf", tag:"apoio_app",             desc:"Suporte ao aplicativo. Quando o usuário tiver dúvidas ou dificuldades para usar o App.", keywords:"app aplicativo suporte dificuldade", example:"", link:"" },
+  pix_autorizacao:       { type:"leaf", tag:"pix_autorizacao",       desc:"Autorização/validação Pix. Quando houver dúvidas relacionadas à abertura de conta QI Tech ou dificuldades no momento da autorização do Pix Inteligente.", keywords:"pix inteligente autorização qi tech", example:"\"Não consigo passar da etapa de autorização do Pix Inteligente.\" / \"Como faço para autorizar? Por que preciso abrir essa conta?\"", link:"" },
+  CRF_taxas:             { type:"leaf", tag:"CRF_taxas",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição", example:"", link:"" },
+  CRF_limites:           { type:"leaf", tag:"CRF_limites",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta", example:"", link:"" },
+  CRF_pre_contratacao:   { type:"leaf", tag:"CRF_pre_contratacao",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil", example:"", link:"" },
+  CT_assinatura_CCB:     { type:"leaf", tag:"CT_assinatura_CCB",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura", example:"", link:"" },
+  CT_Como_funciona:      { type:"leaf", tag:"CT_Como_funciona",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona", example:"\"Quero fazer uma simulação de empréstimo consignado.\"", link:"" },
+  ant_duvidas:           { type:"leaf", tag:"ant_duvidas",           desc:"Dúvidas antecipação. Dúvidas gerais sobre Antecipação de Salário, funcionamento, contratação, prazo ou utilização.", keywords:"antecipação salário duvida geral", example:"", link:"" },
 
   /* Bloqueio */
-  reprovado_renda:       { type:"leaf", tag:"reprovado_renda",       desc:"Reprovação por renda. Quando o usuário estiver bloqueado por ausência de salário/análise de renda.", keywords:"renda salário bloqueado análise" },
-  reprovado_modelo:      { type:"leaf", tag:"reprovado_modelo",      desc:"Reprovação por modelo. Quando o cliente questionar resultado da análise ou motivo da reprovação.", keywords:"reprovado modelo motivo análise" },
-  reprovado_atraso:      { type:"leaf", tag:"reprovado_atraso",      desc:"Reprovação por atraso. Quando houver bloqueio devido a atraso no pagamento.", keywords:"atraso bloqueio pagamento" },
-  reprovado_qi:          { type:"leaf", tag:"reprovado_qi",          desc:"Reprovação na abertura da conta QI Tech. Quando a abertura de conta for rejeitada pela QI Tech.", keywords:"qi tech rejeitada conta" },
-  CT_reprovado_modelo:   { type:"leaf", tag:"CT_reprovado_modelo",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado" },
+  reprovado_renda:       { type:"leaf", tag:"reprovado_renda",       desc:"Reprovação por renda. Quando o usuário estiver bloqueado por ausência de salário/análise de renda.", keywords:"renda salário bloqueado análise", example:"", link:"" },
+  reprovado_modelo:      { type:"leaf", tag:"reprovado_modelo",      desc:"Reprovação por modelo. Quando o cliente questionar resultado da análise ou motivo da reprovação.", keywords:"reprovado modelo motivo análise", example:"", link:"" },
+  reprovado_atraso:      { type:"leaf", tag:"reprovado_atraso",      desc:"Reprovação por atraso. Quando houver bloqueio devido a atraso no pagamento.", keywords:"atraso bloqueio pagamento", example:"", link:"" },
+  reprovado_qi:          { type:"leaf", tag:"reprovado_qi",          desc:"Reprovação na abertura da conta QI Tech. Quando a abertura de conta for rejeitada pela QI Tech.", keywords:"qi tech rejeitada conta", example:"", link:"" },
+  CT_reprovado_modelo:   { type:"leaf", tag:"CT_reprovado_modelo",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado", example:"\"Por que fui negado?\" / \"Vi que não foi aprovado, por quê?\"", link:"" },
 
   /* Como a Facio recebe dinheiro do cliente */
-  cobranca_info:         { type:"leaf", tag:"cobrança_info",         desc:"Informações de cobrança por nossos meios de pagamento. Quando o cliente questionar valores cobrados parcial ou integralmente.", keywords:"cobrança valor pagamento" },
-  cobranca_excecao:      { type:"leaf", tag:"cobrança_excecao",      desc:"Cobrança com exceção para devolução de valores. Utilizar quando o cliente teve uma cobrança realizada e, após análise do caso, será aberta uma exceção para devolução do valor devido a um cenário sensível, erro operacional ou situação fora do padrão.", keywords:"exceção devolução erro operacional" },
-  arrependimento_7d:     { type:"leaf", tag:"arrependimento_7d",     desc:"Cancelamento em até 7 dias. Quando o cliente solicitar devolução dentro do prazo legal.", keywords:"7 dias arrependimento prazo legal devolução" },
-  arrependimento_depois_7d: { type:"leaf", tag:"arrependimento_depois_7d", desc:"Arrependimento após 7 dias. Quando o cliente solicita devolução após o prazo legal pelo App do banco e deseja a baixa da pendência no App da Facio.", keywords:"depois 7 dias baixa pendência" },
-  reembolso:             { type:"leaf", tag:"reembolso",             desc:"Reembolso de valores. Utilizar quando o cliente sofrer um desconto indevido, cobrança incorreta ou pagamento em duplicidade e for necessário realizar devolução de valores.", keywords:"desconto indevido duplicidade devolução" },
-  CRF_divida:            { type:"leaf", tag:"CRF_divida",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil" },
-  CT_pagamento_antecipado: { type:"leaf", tag:"CT_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado" },
-  CT_parcela_atraso:     { type:"leaf", tag:"CT_parcela_atraso",     desc:"Parcela em atraso CT. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado" },
-  ant_duvidas_pagamento: { type:"leaf", tag:"ant_duvidas_pagamento", desc:"Informações gerais referente ao pagamento. Dúvidas sobre formas de pagamento da antecipação ou demais assuntos sobre o pagamento.", keywords:"formas de pagamento antecipação" },
-  ant_duvidas_inadimplencia: { type:"leaf", tag:"ant_duvidas_inadimplencia", desc:"Clientes inadimplentes. Dúvidas sobre atraso, dívida ou renegociação.", keywords:"inadimplente atraso renegociação" },
+  cobranca_info:         { type:"leaf", tag:"cobrança_info",         desc:"Informações de cobrança por nossos meios de pagamento. Quando o cliente questionar valores cobrados parcial ou integralmente.", keywords:"cobrança valor pagamento", example:"", link:"" },
+  cobranca_excecao:      { type:"leaf", tag:"cobrança_excecao",      desc:"Cobrança com exceção para devolução de valores. Utilizar quando o cliente teve uma cobrança realizada e, após análise do caso, será aberta uma exceção para devolução do valor devido a um cenário sensível, erro operacional ou situação fora do padrão.", keywords:"exceção devolução erro operacional", example:"", link:"" },
+  arrependimento_7d:     { type:"leaf", tag:"arrependimento_7d",     desc:"Cancelamento em até 7 dias. Quando o cliente solicitar devolução dentro do prazo legal.", keywords:"7 dias arrependimento prazo legal devolução", example:"", link:"" },
+  arrependimento_depois_7d: { type:"leaf", tag:"arrependimento_depois_7d", desc:"Arrependimento após 7 dias. Quando o cliente solicita devolução após o prazo legal pelo App do banco e deseja a baixa da pendência no App da Facio.", keywords:"depois 7 dias baixa pendência", example:"", link:"" },
+  reembolso:             { type:"leaf", tag:"reembolso",             desc:"Reembolso de valores. Utilizar quando o cliente sofrer um desconto indevido, cobrança incorreta ou pagamento em duplicidade e for necessário realizar devolução de valores.", keywords:"desconto indevido duplicidade devolução", example:"", link:"" },
+  CRF_divida:            { type:"leaf", tag:"CRF_divida",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil", example:"", link:"" },
+  CT_pagamento_antecipado: { type:"leaf", tag:"CT_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado", example:"\"Quero quitar meu consignado.\" / \"Tem como pagar antes?\"", link:"" },
+  CT_parcela_atraso:     { type:"leaf", tag:"CT_parcela_atraso",     desc:"Parcela em atraso CT. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado", example:"", link:"" },
+  ant_duvidas_pagamento: { type:"leaf", tag:"ant_duvidas_pagamento", desc:"Informações gerais referente ao pagamento. Dúvidas sobre formas de pagamento da antecipação ou demais assuntos sobre o pagamento.", keywords:"formas de pagamento antecipação", example:"", link:"" },
+  ant_duvidas_inadimplencia: { type:"leaf", tag:"ant_duvidas_inadimplencia", desc:"Clientes inadimplentes. Dúvidas sobre atraso, dívida ou renegociação.", keywords:"inadimplente atraso renegociação", example:"", link:"" },
 
   /* Como a Facio envia dinheiro para o cliente */
-  estorno:               { type:"leaf", tag:"estorno",               desc:"Estorno. Descrição e critério de uso não detalhados no material recebido — sinalizar ao gestor para complementar.", keywords:"estorno devolução" },
-  pix_avulso:            { type:"leaf", tag:"pix_avulso",            desc:"Pix avulso QI Tech. Quando houver envio manual de Pix para conta QI Tech ou necessidade de orientação sobre esse pagamento.", keywords:"pix avulso manual qi tech" },
-  CRF_deposito_prazo:    { type:"leaf", tag:"CRF_deposito_prazo",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil" },
-  CRF_pagamento_antecipado: { type:"leaf", tag:"CRF_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil" },
-  CRF_renegociacao:      { type:"leaf", tag:"CRF_renegociacao",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida" },
-  CT_desembolso:         { type:"leaf", tag:"CT_desembolso",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado" },
-  CT_Cancelamento:       { type:"leaf", tag:"CT_Cancelamento",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro" },
-  CT_cobranca_indevida:  { type:"leaf", tag:"CT_Cobrança_indevida",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado" },
-  ant_duvidas_deposito:  { type:"leaf", tag:"ant_duvidas_deposito",  desc:"Depósito antecipação. Dúvidas sobre depósito da antecipação, prazo, falha no recebimento.", keywords:"depósito antecipação falha prazo" },
+  estorno:               { type:"leaf", tag:"estorno",               desc:"Estorno. Descrição e critério de uso não detalhados no material recebido — sinalizar ao gestor para complementar.", keywords:"estorno devolução", example:"", link:"" },
+  pix_avulso:            { type:"leaf", tag:"pix_avulso",            desc:"Pix avulso QI Tech. Quando houver envio manual de Pix para conta QI Tech ou necessidade de orientação sobre esse pagamento.", keywords:"pix avulso manual qi tech", example:"", link:"" },
+  CRF_deposito_prazo:    { type:"leaf", tag:"CRF_deposito_prazo",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil", example:"", link:"" },
+  CRF_pagamento_antecipado: { type:"leaf", tag:"CRF_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil", example:"", link:"" },
+  CRF_renegociacao:      { type:"leaf", tag:"CRF_renegociacao",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida", example:"", link:"" },
+  CT_desembolso:         { type:"leaf", tag:"CT_desembolso",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado", example:"", link:"" },
+  CT_Cancelamento:       { type:"leaf", tag:"CT_Cancelamento",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro", example:"", link:"" },
+  CT_cobranca_indevida:  { type:"leaf", tag:"CT_Cobrança_indevida",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado", example:"\"Fui cobrado sem receber nada.\"", link:"" },
+  ant_duvidas_deposito:  { type:"leaf", tag:"ant_duvidas_deposito",  desc:"Depósito antecipação. Dúvidas sobre depósito da antecipação, prazo, falha no recebimento.", keywords:"depósito antecipação falha prazo", example:"", link:"" },
 
   /* Gestão de Segurança */
-  fraude_confirmada:     { type:"leaf", tag:"fraude_confirmada",     desc:"Fraude. Utilizar apenas quando houver confirmação de fraude em sistema, tarja vermelha/preta ou validação interna confirmada.", keywords:"fraude confirmada tarja vermelha preta" },
-  suspeita_fraude:       { type:"leaf", tag:"suspeita_fraude",       desc:"Suspeita de fraude. Quando houver comportamento suspeito, inconsistência de dados, indícios de fraude ou necessidade de validação.", keywords:"suspeita comportamento inconsistência" },
+  fraude_confirmada:     { type:"leaf", tag:"fraude_confirmada",     desc:"Fraude. Utilizar apenas quando houver confirmação de fraude em sistema, tarja vermelha/preta ou validação interna confirmada.", keywords:"fraude confirmada tarja vermelha preta", example:"", link:"" },
+  suspeita_fraude:       { type:"leaf", tag:"suspeita_fraude",       desc:"Suspeita de fraude. Quando houver comportamento suspeito, inconsistência de dados, indícios de fraude ou necessidade de validação.", keywords:"suspeita comportamento inconsistência", example:"", link:"" },
 
   /* Produtos */
-  inatividade:           { type:"leaf", tag:"inatividade",           desc:"Encerramento por inatividade. Quando o atendimento for encerrado sem retorno do cliente e sem identificação da demanda.", keywords:"sem retorno encerrado inatividade" },
-  canais_criticos:       { type:"leaf", tag:"canais_criticos",       desc:"Canal crítico. Clientes vindos do Reclame Aqui, Consumidor.gov ou canais com potencial de escalonamento.", keywords:"reclame aqui consumidor gov escalonamento" },
-  indicacao:             { type:"leaf", tag:"indicacao",             desc:"Programa de indicação. Dúvidas, falhas, não recebimento ou regras do programa de indicação.", keywords:"indicação programa recompensa" },
-  concorrentes:          { type:"leaf", tag:"concorrentes",          desc:"Outras instituições. Quando o cliente mencionar taxas, limites, propostas de outras instituições financeiras ou se enganar com o contrato pensando que se trata da Facio.", keywords:"concorrente outra instituição confusão" },
-  campanhas:             { type:"leaf", tag:"campanhas",             desc:"Campanhas e teste. Casos relacionados a campanhas temporárias, ações promocionais ou testes internos da operação.", keywords:"campanha promoção teste interno" },
+  inatividade:           { type:"leaf", tag:"inatividade",           desc:"Encerramento por inatividade. Quando o atendimento for encerrado sem retorno do cliente e sem identificação da demanda.", keywords:"sem retorno encerrado inatividade", example:"", link:"" },
+  canais_criticos:       { type:"leaf", tag:"canais_criticos",       desc:"Canal crítico. Clientes vindos do Reclame Aqui, Consumidor.gov ou canais com potencial de escalonamento.", keywords:"reclame aqui consumidor gov escalonamento", example:"", link:"" },
+  indicacao:             { type:"leaf", tag:"indicacao",             desc:"Programa de indicação. Dúvidas, falhas, não recebimento ou regras do programa de indicação.", keywords:"indicação programa recompensa", example:"", link:"" },
+  concorrentes:          { type:"leaf", tag:"concorrentes",          desc:"Outras instituições. Quando o cliente mencionar taxas, limites, propostas de outras instituições financeiras ou se enganar com o contrato pensando que se trata da Facio.", keywords:"concorrente outra instituição confusão", example:"", link:"" },
+  campanhas:             { type:"leaf", tag:"campanhas",             desc:"Campanhas e teste. Casos relacionados a campanhas temporárias, ações promocionais ou testes internos da operação.", keywords:"campanha promoção teste interno", example:"", link:"" },
 };
 
 /* ---------------------------------------------------------
@@ -562,11 +575,19 @@ function renderHistory(){
   if (node.type === "leaf"){
     const result = document.createElement("div");
     result.className = "result";
-    result.innerHTML =
+    let html =
       '<div class="label">TAG RECOMENDADA</div>' +
       '<div class="tagname">🏷️ ' + escapeHtml(node.tag) + '</div>' +
-      '<div class="desc">' + escapeHtml(node.desc) + '</div>' +
-      '<div class="note">Use sempre a tag referente à solicitação primária do usuário — este resultado é uma sugestão, não uma regra fixa.</div>';
+      '<div class="desc">' + escapeHtml(node.desc) + '</div>';
+    if (node.example){
+      html += '<div class="example"><span class="example-label">Frases do cliente:</span> ' + escapeHtml(node.example) + '</div>';
+    }
+    if (node.link){
+      const safeHref = escapeHtml(node.link);
+      html += '<div class="saiba-mais"><a href="' + safeHref + '" target="_blank" rel="noopener noreferrer">🔗 Saiba mais</a></div>';
+    }
+    html += '<div class="note">Use sempre a tag referente à solicitação primária do usuário — este resultado é uma sugestão, não uma regra fixa.</div>';
+    result.innerHTML = html;
     el.appendChild(result);
   } else {
     const qbox = document.createElement("div");
@@ -625,9 +646,13 @@ function buildEditor(nodeId){
 
     const fTag = fieldText("Nome da tag", node.tag, "tagInput");
     const fDesc = fieldTextarea("Descrição", node.desc, "descInput");
+    const fExample = fieldTextarea("Frases do cliente (exemplos reais do que ele diz)", node.example || "", "exampleInput");
+    const fLink = fieldText("Link para saber mais (cole a URL do material)", node.link || "", "linkInput");
     const fKw = fieldText("Palavras-chave para a busca (separadas por espaço)", node.keywords || "", "kwInput");
     box.appendChild(fTag);
     box.appendChild(fDesc);
+    box.appendChild(fExample);
+    box.appendChild(fLink);
     box.appendChild(fKw);
 
     const actions = document.createElement("div");
@@ -641,6 +666,8 @@ function buildEditor(nodeId){
     box.querySelector("#saveLeafBtn").onclick = () => {
       node.tag = box.querySelector("#tagInput").value.trim() || node.tag;
       node.desc = box.querySelector("#descInput").value.trim();
+      node.example = box.querySelector("#exampleInput").value.trim();
+      node.link = box.querySelector("#linkInput").value.trim();
       node.keywords = box.querySelector("#kwInput").value.trim();
       persist();
       renderAll();
@@ -680,7 +707,7 @@ function buildEditor(nodeId){
     addOptBtn.style.marginBottom = "14px";
     addOptBtn.onclick = () => {
       const newId = "tag_" + Math.random().toString(36).slice(2,8);
-      NODES[newId] = { type:"leaf", tag:newId, desc:"Descreva quando usar esta tag.", keywords:"" };
+      NODES[newId] = { type:"leaf", tag:newId, desc:"Descreva quando usar esta tag.", keywords:"", example:"", link:"" };
       node.options.push({ label:"Nova opção", next:newId });
       persist();
       renderAll();
