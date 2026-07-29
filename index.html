@@ -300,8 +300,8 @@ const DEFAULT_NODES = {
     { label:"Banco não permitido no cadastro", next:"banco_nao_aceito" },
     { label:"Dúvidas/dificuldades no App", next:"apoio_app" },
     { label:"Autorização/validação do Pix", next:"pix_autorizacao" },
-    { label:"Taxas e encargos (Crédito Fácil)", next:"CRF_taxas" },
-    { label:"Aumento de limite / nova antecipação (Crédito Fácil)", next:"CRF_limites" },
+    { label:"Taxas e encargos — Crédito Fácil", next:"CRF_taxas" },
+    { label:"Aumento de limite / nova antecipação — Crédito Fácil", next:"CRF_limites" },
     { label:"Pré-contratação Crédito Fácil", next:"CRF_pre_contratacao" },
     { label:"Assinatura CCB — Crédito do Trabalhador", next:"CT_assinatura_CCB" },
     { label:"Como funciona — Crédito do Trabalhador", next:"CT_Como_funciona" },
@@ -322,19 +322,19 @@ const DEFAULT_NODES = {
     { label:"Cancelamento em até 7 dias", next:"arrependimento_7d" },
     { label:"Arrependimento após 7 dias", next:"arrependimento_depois_7d" },
     { label:"Reembolso (desconto indevido / duplicidade)", next:"reembolso" },
-    { label:"Dúvidas sobre dívida em atraso (Crédito Fácil)", next:"CRF_divida" },
+    { label:"Dúvidas sobre dívida em atraso — Crédito Fácil", next:"CRF_divida" },
     { label:"Antecipar/quitar parcela — Crédito do Trabalhador", next:"CT_pagamento_antecipado" },
     { label:"Parcela em atraso — Crédito do Trabalhador", next:"CT_parcela_atraso" },
     { label:"Formas de pagamento da antecipação", next:"ant_duvidas_pagamento" },
-    { label:"Cliente inadimplente (antecipação)", next:"ant_duvidas_inadimplencia" },
+    { label:"Cliente inadimplente — Antecipação", next:"ant_duvidas_inadimplencia" },
   ]},
 
   envia_root: { type:"question", question:"Como a Facio envia dinheiro para o cliente — qual é o assunto?", options:[
     { label:"Estorno", next:"estorno" },
     { label:"Pix avulso para conta QI Tech", next:"pix_avulso" },
-    { label:"Prazo de depósito (Crédito Fácil)", next:"CRF_deposito_prazo" },
+    { label:"Prazo de depósito — Crédito Fácil", next:"CRF_deposito_prazo" },
     { label:"Antecipar/quitar — Crédito Fácil", next:"CRF_pagamento_antecipado" },
-    { label:"Renegociação com desconto (Crédito Fácil)", next:"CRF_renegociacao" },
+    { label:"Renegociação com desconto — Crédito Fácil", next:"CRF_renegociacao" },
     { label:"Valor desembolsado — Crédito do Trabalhador", next:"CT_desembolso" },
     { label:"Cancelamento manual — Crédito do Trabalhador", next:"CT_Cancelamento" },
     { label:"Cobrança indevida — Crédito do Trabalhador", next:"CT_cobranca_indevida" },
@@ -365,19 +365,19 @@ const DEFAULT_NODES = {
   banco_nao_aceito:      { type:"leaf", tag:"banco_nao_aceito",      desc:"Banco não permitido. Quando o usuário quiser cadastrar um banco não aceito.", keywords:"banco não permitido cadastrar", example:"", link:"" },
   apoio_app:             { type:"leaf", tag:"apoio_app",             desc:"Suporte ao aplicativo. Quando o usuário tiver dúvidas ou dificuldades para usar o App.", keywords:"app aplicativo suporte dificuldade", example:"", link:"" },
   pix_autorizacao:       { type:"leaf", tag:"pix_autorizacao",       desc:"Autorização/validação Pix. Quando houver dúvidas relacionadas à abertura de conta QI Tech ou dificuldades no momento da autorização do Pix Inteligente.", keywords:"pix inteligente autorização qi tech", example:"\"Não consigo passar da etapa de autorização do Pix Inteligente.\" / \"Como faço para autorizar? Por que preciso abrir essa conta?\"", link:"" },
-  CRF_taxas:             { type:"leaf", tag:"CRF_taxas",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição", example:"", link:"" },
-  CRF_limites:           { type:"leaf", tag:"CRF_limites",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta", example:"", link:"" },
-  CRF_pre_contratacao:   { type:"leaf", tag:"CRF_pre_contratacao",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil", example:"", link:"" },
-  CT_assinatura_CCB:     { type:"leaf", tag:"CT_assinatura_CCB",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura", example:"", link:"" },
-  CT_Como_funciona:      { type:"leaf", tag:"CT_Como_funciona",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona", example:"\"Quero fazer uma simulação de empréstimo consignado.\"", link:"" },
-  ant_duvidas:           { type:"leaf", tag:"ant_duvidas",           desc:"Dúvidas antecipação. Dúvidas gerais sobre Antecipação de Salário, funcionamento, contratação, prazo ou utilização.", keywords:"antecipação salário duvida geral", example:"", link:"" },
+  CRF_taxas:             { type:"leaf", tag:"taxas_crf",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição", example:"", link:"" },
+  CRF_limites:           { type:"leaf", tag:"limites_crf",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta", example:"", link:"" },
+  CRF_pre_contratacao:   { type:"leaf", tag:"pre_contratacao_crf",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil", example:"", link:"" },
+  CT_assinatura_CCB:     { type:"leaf", tag:"assinatura_CCB_ct",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura", example:"", link:"" },
+  CT_Como_funciona:      { type:"leaf", tag:"Como_funciona_ct",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona", example:"\"Quero fazer uma simulação de empréstimo consignado.\"", link:"" },
+  ant_duvidas:           { type:"leaf", tag:"duvidas_ant",           desc:"Dúvidas antecipação. Dúvidas gerais sobre Antecipação de Salário, funcionamento, contratação, prazo ou utilização.", keywords:"antecipação salário duvida geral", example:"", link:"" },
 
   /* Bloqueio */
   reprovado_renda:       { type:"leaf", tag:"reprovado_renda",       desc:"Reprovação por renda. Quando o usuário estiver bloqueado por ausência de salário/análise de renda.", keywords:"renda salário bloqueado análise", example:"", link:"" },
   reprovado_modelo:      { type:"leaf", tag:"reprovado_modelo",      desc:"Reprovação por modelo. Quando o cliente questionar resultado da análise ou motivo da reprovação.", keywords:"reprovado modelo motivo análise", example:"", link:"" },
   reprovado_atraso:      { type:"leaf", tag:"reprovado_atraso",      desc:"Reprovação por atraso. Quando houver bloqueio devido a atraso no pagamento.", keywords:"atraso bloqueio pagamento", example:"", link:"" },
   reprovado_qi:          { type:"leaf", tag:"reprovado_qi",          desc:"Reprovação na abertura da conta QI Tech. Quando a abertura de conta for rejeitada pela QI Tech.", keywords:"qi tech rejeitada conta", example:"", link:"" },
-  CT_reprovado_modelo:   { type:"leaf", tag:"CT_reprovado_modelo",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado", example:"\"Por que fui negado?\" / \"Vi que não foi aprovado, por quê?\"", link:"" },
+  CT_reprovado_modelo:   { type:"leaf", tag:"reprovado_modelo_ct",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado", example:"\"Por que fui negado?\" / \"Vi que não foi aprovado, por quê?\"", link:"" },
 
   /* Como a Facio recebe dinheiro do cliente */
   cobranca_info:         { type:"leaf", tag:"cobrança_info",         desc:"Informações de cobrança por nossos meios de pagamento. Quando o cliente questionar valores cobrados parcial ou integralmente.", keywords:"cobrança valor pagamento", example:"", link:"" },
@@ -385,22 +385,22 @@ const DEFAULT_NODES = {
   arrependimento_7d:     { type:"leaf", tag:"arrependimento_7d",     desc:"Cancelamento em até 7 dias. Quando o cliente solicitar devolução dentro do prazo legal.", keywords:"7 dias arrependimento prazo legal devolução", example:"", link:"" },
   arrependimento_depois_7d: { type:"leaf", tag:"arrependimento_depois_7d", desc:"Arrependimento após 7 dias. Quando o cliente solicita devolução após o prazo legal pelo App do banco e deseja a baixa da pendência no App da Facio.", keywords:"depois 7 dias baixa pendência", example:"", link:"" },
   reembolso:             { type:"leaf", tag:"reembolso",             desc:"Reembolso de valores. Utilizar quando o cliente sofrer um desconto indevido, cobrança incorreta ou pagamento em duplicidade e for necessário realizar devolução de valores.", keywords:"desconto indevido duplicidade devolução", example:"", link:"" },
-  CRF_divida:            { type:"leaf", tag:"CRF_divida",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil", example:"", link:"" },
-  CT_pagamento_antecipado: { type:"leaf", tag:"CT_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado", example:"\"Quero quitar meu consignado.\" / \"Tem como pagar antes?\"", link:"" },
-  CT_parcela_atraso:     { type:"leaf", tag:"CT_parcela_atraso",     desc:"Parcela em atraso CT. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado", example:"", link:"" },
-  ant_duvidas_pagamento: { type:"leaf", tag:"ant_duvidas_pagamento", desc:"Informações gerais referente ao pagamento. Dúvidas sobre formas de pagamento da antecipação ou demais assuntos sobre o pagamento.", keywords:"formas de pagamento antecipação", example:"", link:"" },
-  ant_duvidas_inadimplencia: { type:"leaf", tag:"ant_duvidas_inadimplencia", desc:"Clientes inadimplentes. Dúvidas sobre atraso, dívida ou renegociação.", keywords:"inadimplente atraso renegociação", example:"", link:"" },
+  CRF_divida:            { type:"leaf", tag:"divida_crf",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil", example:"", link:"" },
+  CT_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_ct", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado", example:"\"Quero quitar meu consignado.\" / \"Tem como pagar antes?\"", link:"" },
+  CT_parcela_atraso:     { type:"leaf", tag:"parcela_atraso_ct",     desc:"Parcela em atraso no consignado. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado", example:"", link:"" },
+  ant_duvidas_pagamento: { type:"leaf", tag:"duvidas_pagamento_ant", desc:"Informações gerais referente ao pagamento. Dúvidas sobre formas de pagamento da antecipação ou demais assuntos sobre o pagamento.", keywords:"formas de pagamento antecipação", example:"", link:"" },
+  ant_duvidas_inadimplencia: { type:"leaf", tag:"duvidas_inadimplencia_ant", desc:"Clientes inadimplentes. Dúvidas sobre atraso, dívida ou renegociação.", keywords:"inadimplente atraso renegociação", example:"", link:"" },
 
   /* Como a Facio envia dinheiro para o cliente */
   estorno:               { type:"leaf", tag:"estorno",               desc:"Estorno. Descrição e critério de uso não detalhados no material recebido — sinalizar ao gestor para complementar.", keywords:"estorno devolução", example:"", link:"" },
   pix_avulso:            { type:"leaf", tag:"pix_avulso",            desc:"Pix avulso QI Tech. Quando houver envio manual de Pix para conta QI Tech ou necessidade de orientação sobre esse pagamento.", keywords:"pix avulso manual qi tech", example:"", link:"" },
-  CRF_deposito_prazo:    { type:"leaf", tag:"CRF_deposito_prazo",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil", example:"", link:"" },
-  CRF_pagamento_antecipado: { type:"leaf", tag:"CRF_pagamento_antecipado", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil", example:"", link:"" },
-  CRF_renegociacao:      { type:"leaf", tag:"CRF_renegociacao",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida", example:"", link:"" },
-  CT_desembolso:         { type:"leaf", tag:"CT_desembolso",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado", example:"", link:"" },
-  CT_Cancelamento:       { type:"leaf", tag:"CT_Cancelamento",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro", example:"", link:"" },
-  CT_cobranca_indevida:  { type:"leaf", tag:"CT_Cobrança_indevida",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado", example:"\"Fui cobrado sem receber nada.\"", link:"" },
-  ant_duvidas_deposito:  { type:"leaf", tag:"ant_duvidas_deposito",  desc:"Depósito antecipação. Dúvidas sobre depósito da antecipação, prazo, falha no recebimento.", keywords:"depósito antecipação falha prazo", example:"", link:"" },
+  CRF_deposito_prazo:    { type:"leaf", tag:"deposito_prazo_crf",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil", example:"", link:"" },
+  CRF_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_crf", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil", example:"", link:"" },
+  CRF_renegociacao:      { type:"leaf", tag:"renegociacao_crf",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida", example:"", link:"" },
+  CT_desembolso:         { type:"leaf", tag:"desembolso_ct",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado", example:"", link:"" },
+  CT_Cancelamento:       { type:"leaf", tag:"Cancelamento_ct",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro", example:"", link:"" },
+  CT_cobranca_indevida:  { type:"leaf", tag:"Cobrança_indevida_ct",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado", example:"\"Fui cobrado sem receber nada.\"", link:"" },
+  ant_duvidas_deposito:  { type:"leaf", tag:"duvidas_deposito_ant",  desc:"Depósito antecipação. Dúvidas sobre depósito da antecipação, prazo, falha no recebimento.", keywords:"depósito antecipação falha prazo", example:"", link:"" },
 
   /* Gestão de Segurança */
   fraude_confirmada:     { type:"leaf", tag:"fraude_confirmada",     desc:"Fraude. Utilizar apenas quando houver confirmação de fraude em sistema, tarja vermelha/preta ou validação interna confirmada.", keywords:"fraude confirmada tarja vermelha preta", example:"", link:"" },
@@ -786,7 +786,7 @@ function buildOptionRow(option, idx){
   Object.keys(NODES).forEach(id => {
     const opt = document.createElement("option");
     opt.value = id;
-    opt.textContent = friendlyLabel(id) + "  [" + id + "]";
+    opt.textContent = friendlyLabel(id);
     if (id === option.next) opt.selected = true;
     select.appendChild(opt);
   });
