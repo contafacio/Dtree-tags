@@ -239,6 +239,17 @@
   .data-io{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
   #importFile{display:none;}
   .save-indicator{font-size:12px;color:var(--muted);margin-top:8px;text-align:right;}
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+    align-items:center;justify-content:center;z-index:9999;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;
+    padding:20px;max-width:380px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.25);
+  }
+  .modal-box p{margin:0 0 18px;font-size:14px;line-height:1.5;color:var(--text);}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
 </style>
 </head>
 <body>
@@ -275,6 +286,16 @@
 
 </div>
 
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <p id="modalMessage"></p>
+    <div class="modal-actions">
+      <button id="modalCancelBtn" class="btn-secondary">Cancelar</button>
+      <button id="modalConfirmBtn" class="btn-primary">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ---------------------------------------------------------
    DADOS PADRÃO — árvore de decisão de tags (25/06/2026)
@@ -295,7 +316,7 @@ const DEFAULT_NODES = {
     { label:"Exclusão de cadastro / encerramento de conta", next:"exclusao" },
     { label:"Validação de documentos", next:"validacao_documentos" },
     { label:"Abertura/validação da conta QI Tech", next:"abertura_conta_qi" },
-    { label:"Assinatura de contrato (CCB)", next:"assinatura_CCB" },
+    { label:"Assinatura de contrato (CCB)", next:"assinatura_ccb_root" },
     { label:"Troca da conta bancária cadastrada", next:"troca_de_conta" },
     { label:"Banco não permitido no cadastro", next:"banco_nao_aceito" },
     { label:"Dúvidas/dificuldades no App", next:"apoio_app" },
@@ -303,9 +324,13 @@ const DEFAULT_NODES = {
     { label:"Taxas e encargos — Crédito Fácil", next:"CRF_taxas" },
     { label:"Aumento de limite / nova antecipação — Crédito Fácil", next:"CRF_limites" },
     { label:"Pré-contratação Crédito Fácil", next:"CRF_pre_contratacao" },
-    { label:"Assinatura CCB — Crédito do Trabalhador", next:"CT_assinatura_CCB" },
     { label:"Como funciona — Crédito do Trabalhador", next:"CT_Como_funciona" },
     { label:"Dúvidas gerais — Antecipação de Salário", next:"ant_duvidas" },
+  ]},
+
+  assinatura_ccb_root: { type:"question", question:"Assinatura de contrato (CCB) — qual produto?", options:[
+    { label:"Crédito Fácil", next:"assinatura_CCB" },
+    { label:"Crédito do Trabalhador", next:"CT_assinatura_CCB" },
   ]},
 
   bloqueio_root: { type:"question", question:"Bloqueio — qual é o motivo da reprovação?", options:[
@@ -334,7 +359,7 @@ const DEFAULT_NODES = {
     { label:"Pix avulso para conta QI Tech", next:"pix_avulso" },
     { label:"Prazo de depósito — Crédito Fácil", next:"CRF_deposito_prazo" },
     { label:"Antecipar/quitar — Crédito Fácil", next:"CRF_pagamento_antecipado" },
-    { label:"Renegociação com desconto — Crédito Fácil", next:"CRF_renegociacao" },
+    { label:"Renegociação com desconto — Crédito do Trabalhador", next:"CRF_renegociacao" },
     { label:"Valor desembolsado — Crédito do Trabalhador", next:"CT_desembolso" },
     { label:"Cancelamento manual — Crédito do Trabalhador", next:"CT_Cancelamento" },
     { label:"Cobrança indevida — Crédito do Trabalhador", next:"CT_cobranca_indevida" },
@@ -360,16 +385,16 @@ const DEFAULT_NODES = {
   exclusao:              { type:"leaf", tag:"exclusão",              desc:"Solicitação de exclusão de cadastro. Utilizar quando o usuário solicitar a exclusão do cadastro ou encerramento da conta QITech.", keywords:"cancelar conta apagar dados excluir encerramento", example:"", link:"" },
   validacao_documentos:  { type:"leaf", tag:"validacao_documentos",  desc:"Validação de documentos. Quando houver validação pela CAF ou manual em casos de suspeita de fraude.", keywords:"caf documentos validação manual", example:"", link:"" },
   abertura_conta_qi:     { type:"leaf", tag:"abertura_conta_qi",     desc:"Abertura/validação conta QI Tech. Quando o usuário tiver dúvidas sobre abertura de conta ou quando está com a conta pendente.", keywords:"qi tech conta pendente abertura", example:"", link:"" },
-  assinatura_CCB:        { type:"leaf", tag:"assinatura_CCB",        desc:"Assinatura de contrato. Quando o usuário tiver dúvidas sobre a CCB, contrato, aceite digital ou não conseguir concluir a assinatura.", keywords:"ccb contrato aceite digital assinar", example:"", link:"" },
+  assinatura_CCB:        { type:"leaf", tag:"assinatura_CCB_CF",        desc:"Assinatura de contrato. Quando o usuário tiver dúvidas sobre a CCB, contrato, aceite digital ou não conseguir concluir a assinatura.", keywords:"ccb contrato aceite digital assinar", example:"", link:"" },
   troca_de_conta:        { type:"leaf", tag:"troca_de_conta",        desc:"Alteração de conta bancária. Quando o cliente solicitar troca da conta cadastrada para recebimento do valor.", keywords:"troca conta bancária recebimento", example:"", link:"" },
   banco_nao_aceito:      { type:"leaf", tag:"banco_nao_aceito",      desc:"Banco não permitido. Quando o usuário quiser cadastrar um banco não aceito.", keywords:"banco não permitido cadastrar", example:"", link:"" },
   apoio_app:             { type:"leaf", tag:"apoio_app",             desc:"Suporte ao aplicativo. Quando o usuário tiver dúvidas ou dificuldades para usar o App.", keywords:"app aplicativo suporte dificuldade", example:"", link:"" },
   pix_autorizacao:       { type:"leaf", tag:"pix_autorizacao",       desc:"Autorização/validação Pix. Quando houver dúvidas relacionadas à abertura de conta QI Tech ou dificuldades no momento da autorização do Pix Inteligente.", keywords:"pix inteligente autorização qi tech", example:"\"Não consigo passar da etapa de autorização do Pix Inteligente.\" / \"Como faço para autorizar? Por que preciso abrir essa conta?\"", link:"" },
-  CRF_taxas:             { type:"leaf", tag:"taxas_crf",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição", example:"", link:"" },
-  CRF_limites:           { type:"leaf", tag:"limites_crf",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta", example:"", link:"" },
-  CRF_pre_contratacao:   { type:"leaf", tag:"pre_contratacao_crf",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil", example:"", link:"" },
-  CT_assinatura_CCB:     { type:"leaf", tag:"assinatura_CCB_ct",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura", example:"", link:"" },
-  CT_Como_funciona:      { type:"leaf", tag:"Como_funciona_ct",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona", example:"\"Quero fazer uma simulação de empréstimo consignado.\"", link:"" },
+  CRF_taxas:             { type:"leaf", tag:"taxas_CRF",             desc:"Taxas e encargos. Quando o usuário questionar juros, encargos ou composição de taxas.", keywords:"juros encargos taxas composição", example:"", link:"" },
+  CRF_limites:           { type:"leaf", tag:"limites_CRF",           desc:"Solicitação de aumento de limite ou nova antecipação. Dúvidas sobre aumento de limite, consulta, funcionamento do limite ou contratação de um novo crédito.", keywords:"aumentar limite novo crédito consulta", example:"", link:"" },
+  CRF_pre_contratacao:   { type:"leaf", tag:"pre_contratacao_CRF",   desc:"Pré-contratação Crédito Fácil. Quando o usuário quiser entender etapas antes da contratação.", keywords:"pré contratação etapas crédito fácil", example:"", link:"" },
+  CT_assinatura_CCB:     { type:"leaf", tag:"assinatura_CCB_CT",     desc:"Assinatura contrato Crédito do Trabalhador. Quando houver dúvidas ou dificuldades na assinatura da CCB.", keywords:"ccb consignado assinatura", example:"", link:"" },
+  CT_Como_funciona:      { type:"leaf", tag:"Como_funciona_CT",      desc:"Funcionamento do produto. Dúvidas gerais sobre contratação, pagamento, simulação e funcionamento.", keywords:"simulação contratação como funciona", example:"\"Quero fazer uma simulação de empréstimo consignado.\"", link:"" },
   ant_duvidas:           { type:"leaf", tag:"duvidas_ant",           desc:"Dúvidas antecipação. Dúvidas gerais sobre Antecipação de Salário, funcionamento, contratação, prazo ou utilização.", keywords:"antecipação salário duvida geral", example:"", link:"" },
 
   /* Bloqueio */
@@ -377,7 +402,7 @@ const DEFAULT_NODES = {
   reprovado_modelo:      { type:"leaf", tag:"reprovado_modelo",      desc:"Reprovação por modelo. Quando o cliente questionar resultado da análise ou motivo da reprovação.", keywords:"reprovado modelo motivo análise", example:"", link:"" },
   reprovado_atraso:      { type:"leaf", tag:"reprovado_atraso",      desc:"Reprovação por atraso. Quando houver bloqueio devido a atraso no pagamento.", keywords:"atraso bloqueio pagamento", example:"", link:"" },
   reprovado_qi:          { type:"leaf", tag:"reprovado_qi",          desc:"Reprovação na abertura da conta QI Tech. Quando a abertura de conta for rejeitada pela QI Tech.", keywords:"qi tech rejeitada conta", example:"", link:"" },
-  CT_reprovado_modelo:   { type:"leaf", tag:"reprovado_modelo_ct",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado", example:"\"Por que fui negado?\" / \"Vi que não foi aprovado, por quê?\"", link:"" },
+  CT_reprovado_modelo:   { type:"leaf", tag:"reprovado_modelo_CT",   desc:"Reprovação Crédito do Trabalhador. Quando o cliente já souber que foi reprovado por modelo ou sem elegibilidade para a contratação do produto.", keywords:"reprovado elegibilidade consignado", example:"\"Por que fui negado?\" / \"Vi que não foi aprovado, por quê?\"", link:"" },
 
   /* Como a Facio recebe dinheiro do cliente */
   cobranca_info:         { type:"leaf", tag:"cobrança_info",         desc:"Informações de cobrança por nossos meios de pagamento. Quando o cliente questionar valores cobrados parcial ou integralmente.", keywords:"cobrança valor pagamento", example:"", link:"" },
@@ -385,21 +410,21 @@ const DEFAULT_NODES = {
   arrependimento_7d:     { type:"leaf", tag:"arrependimento_7d",     desc:"Cancelamento em até 7 dias. Quando o cliente solicitar devolução dentro do prazo legal.", keywords:"7 dias arrependimento prazo legal devolução", example:"", link:"" },
   arrependimento_depois_7d: { type:"leaf", tag:"arrependimento_depois_7d", desc:"Arrependimento após 7 dias. Quando o cliente solicita devolução após o prazo legal pelo App do banco e deseja a baixa da pendência no App da Facio.", keywords:"depois 7 dias baixa pendência", example:"", link:"" },
   reembolso:             { type:"leaf", tag:"reembolso",             desc:"Reembolso de valores. Utilizar quando o cliente sofrer um desconto indevido, cobrança incorreta ou pagamento em duplicidade e for necessário realizar devolução de valores.", keywords:"desconto indevido duplicidade devolução", example:"", link:"" },
-  CRF_divida:            { type:"leaf", tag:"divida_crf",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil", example:"", link:"" },
-  CT_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_ct", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado", example:"\"Quero quitar meu consignado.\" / \"Tem como pagar antes?\"", link:"" },
-  CT_parcela_atraso:     { type:"leaf", tag:"parcela_atraso_ct",     desc:"Parcela em atraso no consignado. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado", example:"", link:"" },
+  CRF_divida:            { type:"leaf", tag:"divida_CRF",            desc:"Dúvidas sobre dívidas em atraso. Quando o cliente deseja consultar informações sobre a dívida em aberto, como valores, vencimentos ou situação do débito.", keywords:"dívida em atraso vencimento crédito fácil", example:"", link:"" },
+  CT_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_CT", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou integralmente o consignado.", keywords:"quitar antecipar parcela consignado", example:"\"Quero quitar meu consignado.\" / \"Tem como pagar antes?\"", link:"" },
+  CT_parcela_atraso:     { type:"leaf", tag:"parcela_atraso_CT",     desc:"Parcela em atraso no consignado. Quando houver parcela vencida e o cliente quiser pagar.", keywords:"parcela vencida atraso consignado", example:"", link:"" },
   ant_duvidas_pagamento: { type:"leaf", tag:"duvidas_pagamento_ant", desc:"Informações gerais referente ao pagamento. Dúvidas sobre formas de pagamento da antecipação ou demais assuntos sobre o pagamento.", keywords:"formas de pagamento antecipação", example:"", link:"" },
   ant_duvidas_inadimplencia: { type:"leaf", tag:"duvidas_inadimplencia_ant", desc:"Clientes inadimplentes. Dúvidas sobre atraso, dívida ou renegociação.", keywords:"inadimplente atraso renegociação", example:"", link:"" },
 
   /* Como a Facio envia dinheiro para o cliente */
   estorno:               { type:"leaf", tag:"estorno",               desc:"Estorno. Descrição e critério de uso não detalhados no material recebido — sinalizar ao gestor para complementar.", keywords:"estorno devolução", example:"", link:"" },
   pix_avulso:            { type:"leaf", tag:"pix_avulso",            desc:"Pix avulso QI Tech. Quando houver envio manual de Pix para conta QI Tech ou necessidade de orientação sobre esse pagamento.", keywords:"pix avulso manual qi tech", example:"", link:"" },
-  CRF_deposito_prazo:    { type:"leaf", tag:"deposito_prazo_crf",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil", example:"", link:"" },
-  CRF_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_crf", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil", example:"", link:"" },
-  CRF_renegociacao:      { type:"leaf", tag:"renegociacao_crf",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida", example:"", link:"" },
-  CT_desembolso:         { type:"leaf", tag:"desembolso_ct",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado", example:"", link:"" },
-  CT_Cancelamento:       { type:"leaf", tag:"Cancelamento_ct",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro", example:"", link:"" },
-  CT_cobranca_indevida:  { type:"leaf", tag:"Cobrança_indevida_ct",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado", example:"\"Fui cobrado sem receber nada.\"", link:"" },
+  CRF_deposito_prazo:    { type:"leaf", tag:"deposito_prazo_CRF",    desc:"Prazo depósito. Quando o cliente quiser saber prazo do depósito ou informar que o valor ainda não caiu em sua conta.", keywords:"prazo depósito não caiu crédito fácil", example:"", link:"" },
+  CRF_pagamento_antecipado: { type:"leaf", tag:"pagamento_antecipado_CRF", desc:"Antecipação/quitação. Quando desejar quitar parcialmente ou antecipadamente o Crédito Fácil.", keywords:"quitar antecipar crédito fácil", example:"", link:"" },
+  CRF_renegociacao:      { type:"leaf", tag:"renegociacao_CT",      desc:"Renegociação com desconto. Quando houver interesse em renegociar dívida com desconto.", keywords:"renegociar desconto dívida", example:"", link:"" },
+  CT_desembolso:         { type:"leaf", tag:"desembolso_CT",         desc:"Valor desembolsado. Informações sobre depósito, liberação e valores do contrato.", keywords:"desembolso liberação depósito consignado", example:"", link:"" },
+  CT_Cancelamento:       { type:"leaf", tag:"Cancelamento_CT",       desc:"Cancelamento manual. Quando for necessário cancelamento manual do contrato por inconsistência, divergência de dados ou erro operacional.", keywords:"cancelamento manual divergência erro", example:"", link:"" },
+  CT_cobranca_indevida:  { type:"leaf", tag:"Cobrança_indevida_CT",  desc:"Cobrança indevida. Quando houver cobrança após pagamento, desconto duplicado ou contrato já quitado.", keywords:"cobrança indevida duplicado quitado", example:"\"Fui cobrado sem receber nada.\"", link:"" },
   ant_duvidas_deposito:  { type:"leaf", tag:"duvidas_deposito_ant",  desc:"Depósito antecipação. Dúvidas sobre depósito da antecipação, prazo, falha no recebimento.", keywords:"depósito antecipação falha prazo", example:"", link:"" },
 
   /* Gestão de Segurança */
@@ -475,6 +500,37 @@ if (window.matchMedia){
 /* ---------------------------------------------------------
    ESTADO DE NAVEGAÇÃO
 --------------------------------------------------------- */
+/* ---------------------------------------------------------
+   MODAL DE CONFIRMAÇÃO PRÓPRIO
+   (substitui confirm()/alert() nativos, que podem ser bloqueados
+   dentro de iframes/embeds como o do Notion)
+--------------------------------------------------------- */
+function showModal(message, opts){
+  opts = opts || {};
+  const showCancel = opts.showCancel !== false;
+  const confirmText = opts.confirmText || "Confirmar";
+  const cancelText = opts.cancelText || "Cancelar";
+  return new Promise((resolve) => {
+    const overlay = document.getElementById("modalOverlay");
+    document.getElementById("modalMessage").textContent = message;
+    const confirmBtn = document.getElementById("modalConfirmBtn");
+    const cancelBtn = document.getElementById("modalCancelBtn");
+    confirmBtn.textContent = confirmText;
+    cancelBtn.textContent = cancelText;
+    cancelBtn.style.display = showCancel ? "inline-block" : "none";
+    overlay.classList.add("open");
+
+    function cleanup(result){
+      overlay.classList.remove("open");
+      confirmBtn.onclick = null;
+      cancelBtn.onclick = null;
+      resolve(result);
+    }
+    confirmBtn.onclick = () => cleanup(true);
+    cancelBtn.onclick = () => cleanup(false);
+  });
+}
+
 let path = [];
 let current = "root";
 let editMode = false;
@@ -680,8 +736,9 @@ function buildEditor(nodeId){
       renderAll();
     };
     box.querySelector("#cancelEditBtn").onclick = () => { editMode = false; toggleEditUi(); renderAll(); };
-    box.querySelector("#deleteLeafBtn").onclick = () => {
-      if (!confirm('Excluir a tag "' + node.tag + '" de vez? Isso também remove a opção que leva até ela.')) return;
+    box.querySelector("#deleteLeafBtn").onclick = async () => {
+      const ok = await showModal('Excluir a tag "' + node.tag + '" de vez? Isso também remove a opção que leva até ela.', { confirmText:"Excluir" });
+      if (!ok) return;
       removeNodeEverywhere(nodeId);
       delete NODES[nodeId];
       persist();
@@ -894,22 +951,23 @@ document.getElementById("importFile").addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
+  reader.onload = async (ev) => {
     try{
       const parsed = JSON.parse(ev.target.result);
       NODES = parsed;
       persist();
       restart();
     }catch(err){
-      alert("Não foi possível ler este arquivo. Verifique se é um JSON exportado por esta ferramenta.");
+      await showModal("Não foi possível ler este arquivo. Verifique se é um JSON exportado por esta ferramenta.", { showCancel:false, confirmText:"OK" });
     }
   };
   reader.readAsText(file);
   e.target.value = "";
 });
 
-document.getElementById("resetBtn").addEventListener("click", () => {
-  if (!confirm("Isso vai apagar suas edições e voltar à versão original. Continuar?")) return;
+document.getElementById("resetBtn").addEventListener("click", async () => {
+  const ok = await showModal("Isso vai apagar suas edições e voltar à versão original. Continuar?", { confirmText:"Restaurar" });
+  if (!ok) return;
   NODES = JSON.parse(JSON.stringify(DEFAULT_NODES));
   persist();
   restart();
